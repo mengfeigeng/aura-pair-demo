@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="100%" height="auto">
+  <defs>
+    <style>
+      .bg { fill: #161b22; }
+      .box { fill: #21262d; stroke: #30363d; stroke-width: 1.5; rx: 10; }
+      .chip { fill: #21262d; stroke: #58a6ff; stroke-width: 2; rx: 8; }
+      .sensor { fill: #21262d; stroke: #a371f7; stroke-width: 1.5; rx: 6; }
+      .output { fill: #21262d; stroke: #3fb950; stroke-width: 1.5; rx: 6; }
+      .phone { fill: #21262d; stroke: #d29922; stroke-width: 1.5; rx: 10; }
+      .text-title { fill: #e6edf3; font: 600 13px 'PingFang SC', sans-serif; }
+      .text-sub { fill: #8b949e; font: 400 11px 'PingFang SC', sans-serif; }
+      .text-label { fill: #8b949e; font: 400 10px 'PingFang SC', sans-serif; }
+      .wire { fill: none; stroke: #30363d; stroke-width: 1.5; }
+      .wire-ble { fill: none; stroke: #58a6ff; stroke-width: 2; stroke-dasharray: 6,4; }
+      .pin { fill: #58a6ff; }
+      .pin-p { fill: #a371f7; }
+      .pin-g { fill: #3fb950; }
+      .arrow { fill: #30363d; }
+    </style>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M1 1 L7 4 L1 7 Z" fill="#30363d"/>
+    </marker>
+    <marker id="arrow-ble" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M1 1 L7 4 L1 7 Z" fill="#58a6ff"/>
+    </marker>
+  </defs>
+  <rect width="900" height="520" fill="#0d1117" rx="12"/>
+
+  <!-- Title -->
+  <text x="450" y="32" text-anchor="middle" fill="#e6edf3" font="700 16px 'PingFang SC', sans-serif">AuraPair 硬件系统架构</text>
+
+  <!-- Central ESP32-S3 -->
+  <rect x="330" y="180" width="240" height="160" class="chip"/>
+  <text x="450" y="220" text-anchor="middle" class="text-title" font-size="15">ESP32-S3</text>
+  <text x="450" y="240" text-anchor="middle" class="text-sub">WiFi + BLE 5.0 双模</text>
+  <text x="450" y="260" text-anchor="middle" class="text-sub">Xtensa LX7 双核 240MHz</text>
+  <text x="450" y="280" text-anchor="middle" class="text-sub">AI 向量指令 | ~25元</text>
+
+  <!-- GPIO Pins on chip -->
+  <circle cx="345" cy="260" r="4" class="pin-p"/><text x="345" y="275" text-anchor="middle" class="text-label" fill="#a371f7">GPIO4</text>
+  <circle cx="360" cy="260" r="4" class="pin-p"/><text x="360" y="275" text-anchor="middle" class="text-label" fill="#a371f7">GPIO5</text>
+  <circle cx="375" cy="260" r="4" class="pin-p"/><text x="375" y="275" text-anchor="middle" class="text-label" fill="#a371f7">GPIO6</text>
+  <circle cx="525" cy="260" r="4" class="pin-g"/><text x="525" y="275" text-anchor="middle" class="text-label" fill="#3fb950">GPIO7-9</text>
+  <circle cx="555" cy="260" r="4" class="pin-g"/><text x="555" y="275" text-anchor="middle" class="text-label" fill="#3fb950">GPIO10</text>
+
+  <!-- Hall Sensors -->
+  <rect x="80" y="80" width="140" height="70" class="sensor"/>
+  <text x="150" y="105" text-anchor="middle" class="text-title">霍尔传感器 1</text>
+  <text x="150" y="122" text-anchor="middle" class="text-sub">A3144 | GPIO4</text>
+  <text x="150" y="138" text-anchor="middle" class="text-label">药仓1（早药）</text>
+
+  <rect x="80" y="170" width="140" height="70" class="sensor"/>
+  <text x="150" y="195" text-anchor="middle" class="text-title">霍尔传感器 2</text>
+  <text x="150" y="212" text-anchor="middle" class="text-sub">A3144 | GPIO5</text>
+  <text x="150" y="228" text-anchor="middle" class="text-label">药仓2（午药）</text>
+
+  <rect x="80" y="260" width="140" height="70" class="sensor"/>
+  <text x="150" y="285" text-anchor="middle" class="text-title">霍尔传感器 3</text>
+  <text x="150" y="302" text-anchor="middle" class="text-sub">A3144 | GPIO6</text>
+  <text x="150" y="318" text-anchor="middle" class="text-label">药仓3（晚药）</text>
+
+  <!-- Wires from sensors to ESP32 -->
+  <path d="M220 115 L280 115 L280 260 L330 260" class="wire" marker-end="url(#arrow)"/>
+  <path d="M220 205 L300 205 L300 260 L330 260" class="wire" marker-end="url(#arrow)"/>
+  <path d="M220 295 L280 295 L280 270 L330 270" class="wire" marker-end="url(#arrow)"/>
+
+  <!-- RGB LED -->
+  <rect x="680" y="100" width="140" height="80" class="output"/>
+  <text x="750" y="125" text-anchor="middle" class="text-title">RGB LED</text>
+  <text x="750" y="142" text-anchor="middle" class="text-sub">GPIO7(R) GPIO8(G) GPIO9(B)</text>
+  <text x="750" y="158" text-anchor="middle" class="text-label">呼吸/闪烁/常亮/熄灭</text>
+
+  <!-- Buzzer -->
+  <rect x="680" y="200" width="140" height="70" class="output"/>
+  <text x="750" y="225" text-anchor="middle" class="text-title">蜂鸣器</text>
+  <text x="750" y="242" text-anchor="middle" class="text-sub">GPIO10 | 有源蜂鸣器</text>
+  <text x="750" y="258" text-anchor="middle" class="text-label">非阻塞 500ms 触发</text>
+
+  <!-- Wires from ESP32 to outputs -->
+  <path d="M570 260 L620 260 L620 140 L680 140" class="wire" marker-end="url(#arrow)"/>
+  <path d="M570 270 L630 270 L630 235 L680 235" class="wire" marker-end="url(#arrow)"/>
+
+  <!-- Flash Storage -->
+  <rect x="360" y="380" width="180" height="60" class="box"/>
+  <text x="450" y="405" text-anchor="middle" class="text-title">Flash 存储</text>
+  <text x="450" y="422" text-anchor="middle" class="text-sub">Preferences API | 10条计划 + 200条日志</text>
+
+  <path d="M450 340 L450 380" class="wire" marker-end="url(#arrow)"/>
+
+  <!-- BLE to Phone -->
+  <rect x="360" y="60" width="180" height="60" class="box"/>
+  <text x="450" y="80" text-anchor="middle" class="text-title" fill="#58a6ff">BLE 5.0 GATT Server</text>
+  <text x="450" y="97" text-anchor="middle" class="text-sub">NimBLE-Arduino | 6个特征值</text>
+  <text x="450" y="113" text-anchor="middle" class="text-label">状态上报 / 命令控制 / 计划同步</text>
+
+  <path d="M450 140 L450 180" class="wire" marker-end="url(#arrow)"/>
+
+  <!-- Phone App -->
+  <rect x="680" y="340" width="180" height="100" class="phone"/>
+  <text x="770" y="365" text-anchor="middle" class="text-title" fill="#d29922">手机 App</text>
+  <text x="770" y="382" text-anchor="middle" class="text-sub">React + TypeScript</text>
+  <text x="770" y="398" text-anchor="middle" class="text-label">双药盒绑定 | 服药计划 | 智能通知</text>
+  <text x="770" y="414" text-anchor="middle" class="text-label">Node.js + PostgreSQL 后端</text>
+
+  <!-- BLE wireless connection -->
+  <path d="M540 90 L680 390" class="wire-ble" marker-end="url(#arrow-ble)"/>
+  <text x="620" y="240" text-anchor="middle" class="text-label" fill="#58a6ff" font-weight="600">BLE 5.0</text>
+
+  <!-- Battery -->
+  <rect x="80" y="380" width="120" height="60" class="box"/>
+  <text x="140" y="405" text-anchor="middle" class="text-title">锂电池</text>
+  <text x="140" y="422" text-anchor="middle" class="text-sub">3.7V | USB-C 充电</text>
+
+  <path d="M200 410 L330 410" class="wire" marker-end="url(#arrow)"/>
+
+  <!-- Legend -->
+  <rect x="80" y="460" width="740" height="40" class="box" rx="6"/>
+  <circle cx="110" cy="480" r="5" fill="#a371f7"/><text x="125" y="484" class="text-sub">输入 — 霍尔传感器</text>
+  <circle cx="280" cy="480" r="5" fill="#3fb950"/><text x="295" y="484" class="text-sub">输出 — LED / 蜂鸣器</text>
+  <circle cx="460" cy="480" r="5" fill="#58a6ff"/><text x="475" y="484" class="text-sub">通信 — BLE 5.0</text>
+  <circle cx="620" cy="480" r="5" fill="#d29922"/><text x="635" y="484" class="text-sub">App — React + Node.js</text>
+</svg>

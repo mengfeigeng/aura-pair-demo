@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" height="auto">
+  <defs>
+    <style>
+      .bg { fill: #0d1117; }
+      .node-idle { fill: #21262d; stroke: #30363d; stroke-width: 1.5; rx: 10; }
+      .node-pre { fill: rgba(88,166,255,0.08); stroke: #58a6ff; stroke-width: 2; rx: 10; }
+      .node-wait { fill: rgba(88,166,255,0.08); stroke: #58a6ff; stroke-width: 2; rx: 10; }
+      .node-missed1 { fill: rgba(248,81,73,0.08); stroke: #f85149; stroke-width: 2; rx: 10; }
+      .node-missed2 { fill: rgba(248,81,73,0.12); stroke: #f85149; stroke-width: 2; rx: 10; }
+      .node-notify { fill: rgba(163,113,247,0.08); stroke: #a371f7; stroke-width: 2; rx: 10; }
+      .node-done { fill: rgba(63,185,80,0.08); stroke: #3fb950; stroke-width: 2; rx: 10; }
+      .text-title { fill: #e6edf3; font: 600 13px 'PingFang SC', sans-serif; }
+      .text-sub { fill: #8b949e; font: 400 11px 'PingFang SC', sans-serif; }
+      .text-time { fill: #8b949e; font: 400 10px 'PingFang SC', sans-serif; }
+      .wire { fill: none; stroke: #30363d; stroke-width: 1.5; }
+      .wire-open { fill: none; stroke: #3fb950; stroke-width: 2; }
+      .wire-miss { fill: none; stroke: #f85149; stroke-width: 2; }
+      .wire-reset { fill: none; stroke: #8b949e; stroke-width: 1.5; stroke-dasharray: 4,3; }
+    </style>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M1 1 L7 4 L1 7 Z" fill="#30363d"/>
+    </marker>
+    <marker id="arr-green" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M1 1 L7 4 L1 7 Z" fill="#3fb950"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M1 1 L7 4 L1 7 Z" fill="#f85149"/>
+    </marker>
+  </defs>
+  <rect width="900" height="560" fill="#0d1117" rx="12"/>
+
+  <!-- Title -->
+  <text x="450" y="32" text-anchor="middle" fill="#e6edf3" font="700 16px 'PingFang SC', sans-serif">AuraPair 提醒引擎 — 7 状态机</text>
+
+  <!-- Row 1: IDLE -->
+  <rect x="390" y="65" width="120" height="55" class="node-idle"/>
+  <text x="450" y="88" text-anchor="middle" class="text-title">IDLE</text>
+  <text x="450" y="106" text-anchor="middle" class="text-time">今日未触发</text>
+
+  <!-- IDLE -> PRE_REMIND -->
+  <path d="M450 120 L450 150" class="wire" marker-end="url(#arr)"/>
+  <text x="465" y="140" class="text-time">T - 5min</text>
+
+  <!-- Row 2: PRE_REMIND -->
+  <rect x="390" y="155" width="120" height="55" class="node-pre"/>
+  <text x="450" y="178" text-anchor="middle" class="text-title" fill="#58a6ff">PRE_REMIND</text>
+  <text x="450" y="196" text-anchor="middle" class="text-time">LED 柔和呼吸</text>
+
+  <!-- PRE -> WAITING -->
+  <path d="M450 210 L450 240" class="wire" marker-end="url(#arr)"/>
+  <text x="465" y="230" class="text-time">T (目标时间)</text>
+
+  <!-- Row 3: WAITING -->
+  <rect x="390" y="245" width="120" height="55" class="node-wait"/>
+  <text x="450" y="268" text-anchor="middle" class="text-title" fill="#58a6ff">WAITING</text>
+  <text x="450" y="286" text-anchor="middle" class="text-time">等待开盖</text>
+
+  <!-- WAITING -> COMPLETED (right branch) -->
+  <path d="M510 272 L560 272 L560 330 L610 330" class="wire-open" marker-end="url(#arr-green)"/>
+  <text x="555" y="268" class="text-time" fill="#3fb950">开盖 ✓</text>
+
+  <!-- Row 4 right: COMPLETED -->
+  <rect x="610" y="302" width="120" height="55" class="node-done"/>
+  <text x="670" y="325" text-anchor="middle" class="text-title" fill="#3fb950">COMPLETED</text>
+  <text x="670" y="343" text-anchor="middle" class="text-time">绿色快闪 300ms → 熄灭</text>
+
+  <!-- WAITING -> MISSED_1 (down) -->
+  <path d="M450 300 L450 330" class="wire-miss" marker-end="url(#arr-red)"/>
+  <text x="465" y="322" class="text-time" fill="#f85149">T + 30min</text>
+
+  <!-- Row 4: MISSED_1 -->
+  <rect x="390" y="335" width="120" height="55" class="node-missed1"/>
+  <text x="450" y="358" text-anchor="middle" class="text-title" fill="#f85149">MISSED_1</text>
+  <text x="450" y="376" text-anchor="middle" class="text-time">红色闪烁 + 蜂鸣器 500ms</text>
+
+  <!-- MISSED_1 -> COMPLETED (right branch) -->
+  <path d="M510 362 L560 362 L560 330 L610 330" class="wire-open" marker-end="url(#arr-green)"/>
+  <text x="555" y="358" class="text-time" fill="#3fb950">开盖 ✓</text>
+
+  <!-- MISSED_1 -> MISSED_2 (down) -->
+  <path d="M450 390 L450 420" class="wire-miss" marker-end="url(#arr-red)"/>
+  <text x="465" y="412" class="text-time" fill="#f85149">T + 90min</text>
+
+  <!-- Row 5: MISSED_2 -->
+  <rect x="390" y="425" width="120" height="55" class="node-missed2"/>
+  <text x="450" y="448" text-anchor="middle" class="text-title" fill="#f85149">MISSED_2</text>
+  <text x="450" y="466" text-anchor="middle" class="text-time">红色常亮 → 上报 App</text>
+
+  <!-- MISSED_2 -> COMPLETED (right branch) -->
+  <path d="M510 452 L560 452 L560 390 L610 357" class="wire-open" marker-end="url(#arr-green)"/>
+  <text x="555" y="448" class="text-time" fill="#3fb950">开盖 ✓</text>
+
+  <!-- MISSED_2 -> NOTIFIED (down) -->
+  <path d="M450 480 L450 510" class="wire-miss" marker-end="url(#arr-red)"/>
+  <text x="465" y="502" class="text-time" fill="#f85149">App 通知家人</text>
+
+  <!-- Row 6: NOTIFIED -->
+  <rect x="390" y="515" width="120" height="35" class="node-notify"/>
+  <text x="450" y="535" text-anchor="middle" class="text-title" fill="#a371f7">NOTIFIED</text>
+
+  <!-- COMPLETED -> END (right) -->
+  <path d="M730 330 L760 330" class="wire" marker-end="url(#arr)"/>
+  <text x="780" y="335" class="text-time">当日结束</text>
+
+  <!-- NOTIFIED -> END (left dashed) -->
+  <path d="M390 532 L320 532 L320 330 L280 330" class="wire-reset" marker-end="url(#arr)"/>
+  <text x="300" y="525" class="text-time">等明天重置</text>
+
+  <!-- Daily reset note -->
+  <rect x="60" y="302" width="100" height="55" class="node-idle"/>
+  <text x="110" y="325" text-anchor="middle" class="text-title">每日重置</text>
+  <text x="110" y="343" text-anchor="middle" class="text-time">0:00 → IDLE</text>
+
+  <path d="M160 330 L200 330 L200 92 L390 92" class="wire-reset" marker-end="url(#arr)"/>
+
+  <!-- Legend -->
+  <rect x="60" y="60" width="260" height="30" fill="#21262d" stroke="#30363d" rx="6"/>
+  <rect x="70" y="68" width="16" height="12" fill="rgba(88,166,255,0.08)" stroke="#58a6ff" rx="3"/>
+  <text x="92" y="78" class="text-time">正常流程</text>
+  <rect x="150" y="68" width="16" height="12" fill="rgba(248,81,73,0.08)" stroke="#f85149" rx="3"/>
+  <text x="172" y="78" class="text-time">漏服升级</text>
+  <rect x="230" y="68" width="16" height="12" fill="rgba(63,185,80,0.08)" stroke="#3fb950" rx="3"/>
+  <text x="252" y="78" class="text-time">开盖完成</text>
+</svg>
