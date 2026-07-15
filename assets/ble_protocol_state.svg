@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520">
+  <defs>
+    <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M1 1 L7 4 L1 7 Z" fill="#52525B"/>
+    </marker>
+    <marker id="arrow-brand" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M1 1 L7 4 L1 7 Z" fill="#4B3FE3"/>
+    </marker>
+    <marker id="arrow-success" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M1 1 L7 4 L1 7 Z" fill="#1DC981"/>
+    </marker>
+  </defs>
+  <style>
+    .title { font: 600 16px/24px "SF Pro Text","PingFang SC",system-ui,sans-serif; fill: #171717; }
+    .subtitle { font: 400 12px/18px "SF Pro Text","PingFang SC",system-ui,sans-serif; fill: #52525B; }
+    .node-text { font: 500 13px/20px "SF Pro Text","PingFang SC",system-ui,sans-serif; fill: #171717; }
+    .node-desc { font: 400 11px/16px "SF Pro Text","PingFang SC",system-ui,sans-serif; fill: #52525B; }
+    .label { font: 400 11px/16px "SF Pro Text","PingFang SC",system-ui,sans-serif; fill: #52525B; }
+    .actor-label { font: 500 13px/20px "SF Pro Text","PingFang SC",system-ui,sans-serif; fill: #171717; }
+    .conn { stroke: #52525B; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; fill: none; marker-end: url(#arrow); }
+    .conn-brand { stroke: #4B3FE3; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; marker-end: url(#arrow-brand); }
+    .conn-success { stroke: #1DC981; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; marker-end: url(#arrow-success); }
+    .conn-dashed { stroke: #52525B; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; fill: none; stroke-dasharray: 5 5; marker-end: url(#arrow); }
+    .box { fill: #F7F7F8; stroke: rgba(23,23,23,0.12); stroke-width: 1.5; rx: 8; }
+    .box-brand { fill: #F2F7FF; stroke: #4B3FE3; stroke-width: 2; rx: 8; }
+    .box-success { fill: color-mix(in srgb,#1DC981 10%,transparent); stroke: #1DC981; stroke-width: 2; rx: 8; }
+    .box-warning { fill: color-mix(in srgb,#EFAA17 10%,transparent); stroke: #EFAA17; stroke-width: 2; rx: 8; }
+    .actor-box { fill: #EFEFF2; stroke: rgba(23,23,23,0.12); stroke-width: 1.5; rx: 8; }
+    .divider { stroke: rgba(23,23,23,0.08); stroke-width: 1; stroke-dasharray: 4 4; }
+  </style>
+
+  <!-- Title -->
+  <text x="450" y="32" text-anchor="middle" class="title">BLE 5.0 GATT 通信协议状态图</text>
+  <text x="450" y="52" text-anchor="middle" class="subtitle">AuraPair 药盒与 App 的蓝牙通信全流程</text>
+
+  <!-- Actor swimlanes -->
+  <rect x="30" y="70" width="260" height="430" class="actor-box"/>
+  <rect x="310" y="70" width="260" height="430" class="actor-box"/>
+  <rect x="590" y="70" width="280" height="430" class="actor-box"/>
+
+  <text x="160" y="96" text-anchor="middle" class="actor-label">ESP32-S3 药盒 (Server)</text>
+  <text x="440" y="96" text-anchor="middle" class="actor-label">手机 App (Client)</text>
+  <text x="730" y="96" text-anchor="middle" class="actor-label">事件 / 数据流</text>
+
+  <!-- Vertical dividers -->
+  <line x1="310" y1="70" x2="310" y2="500" class="divider"/>
+  <line x1="590" y1="70" x2="590" y2="500" class="divider"/>
+
+  <!-- ==== Node 1: 广播等待 ==== -->
+  <rect x="55" y="120" width="210" height="56" class="box-brand"/>
+  <text x="160" y="145" text-anchor="middle" class="node-text">ADV_WAITING</text>
+  <text x="160" y="165" text-anchor="middle" class="node-desc">BLE广播 / 可被发现</text>
+
+  <!-- ==== Node 2: 连接建立 ==== -->
+  <rect x="335" y="120" width="210" height="56" class="box-brand"/>
+  <text x="440" y="145" text-anchor="middle" class="node-text">CONNECTING</text>
+  <text x="440" y="165" text-anchor="middle" class="node-desc">App发起配对连接</text>
+
+  <!-- Arrow: 广播等待 -> 连接建立 -->
+  <line x1="265" y1="148" x2="335" y2="148" class="conn-brand"/>
+  <text x="300" y="140" text-anchor="middle" class="label">扫描+连接</text>
+
+  <!-- ==== Node 3: GATT服务发现 ==== -->
+  <rect x="335" y="210" width="210" height="56" class="box"/>
+  <text x="440" y="235" text-anchor="middle" class="node-text">SERVICE_DISCOVERY</text>
+  <text x="440" y="255" text-anchor="middle" class="node-desc">发现自定义Service</text>
+
+  <!-- Arrow: 连接建立 -> 服务发现 -->
+  <line x1="440" y1="176" x2="440" y2="210" class="conn"/>
+  <text x="480" y="196" text-anchor="start" class="label">onConnect()</text>
+
+  <!-- ==== Node 4: 特征值订阅 ==== -->
+  <rect x="335" y="300" width="210" height="56" class="box"/>
+  <text x="440" y="325" text-anchor="middle" class="node-text">CHAR_SUBSCRIBE</text>
+  <text x="440" y="345" text-anchor="middle" class="node-desc">订阅Notify特征值</text>
+
+  <!-- Arrow: 服务发现 -> 特征值订阅 -->
+  <line x1="440" y1="266" x2="440" y2="300" class="conn"/>
+  <text x="480" y="286" text-anchor="start" class="label">发现6个Characteristic</text>
+
+  <!-- ==== Node 5: 时间同步 ==== -->
+  <rect x="55" y="300" width="210" height="56" class="box-warning"/>
+  <text x="160" y="325" text-anchor="middle" class="node-text">TIME_SYNC</text>
+  <text x="160" y="345" text-anchor="middle" class="node-desc">RTC时间校准</text>
+
+  <!-- Arrow: 特征值订阅 -> 时间同步 -->
+  <line x1="335" y1="328" x2="265" y2="328" class="conn"/>
+  <text x="300" y="320" text-anchor="middle" class="label">Write TimeSync</text>
+
+  <!-- ==== Node 6: 正常运行 ==== -->
+  <rect x="55" y="390" width="210" height="56" class="box-success"/>
+  <text x="160" y="415" text-anchor="middle" class="node-text">CONNECTED_ACTIVE</text>
+  <text x="160" y="435" text-anchor="middle" class="node-desc">双向数据通信中</text>
+
+  <!-- Arrow: 时间同步 -> 正常运行 -->
+  <line x1="160" y1="356" x2="160" y2="390" class="conn-success"/>
+  <text x="120" y="376" text-anchor="end" class="label">同步完成</text>
+
+  <!-- ==== Node 7: App数据接收 ==== -->
+  <rect x="335" y="390" width="210" height="56" class="box-success"/>
+  <text x="440" y="415" text-anchor="middle" class="node-text">DATA_RECEIVING</text>
+  <text x="440" y="435" text-anchor="middle" class="node-desc">接收状态/日志通知</text>
+
+  <!-- Arrow: 正常运行 -> App数据接收 -->
+  <line x1="265" y1="418" x2="335" y2="418" class="conn-success"/>
+  <text x="300" y="410" text-anchor="middle" class="label">Notify推送</text>
+
+  <!-- ==== Node 8: 指令下发 ==== -->
+  <rect x="335" y="480" width="210" height="40" class="box"/>
+  <text x="440" y="505" text-anchor="middle" class="node-text">COMMAND_WRITE</text>
+
+  <!-- Arrow: App数据接收 -> 指令下发 -->
+  <line x1="440" y1="446" x2="440" y2="480" class="conn"/>
+  <text x="480" y="466" text-anchor="start" class="label">用户操作</text>
+
+  <!-- ==== Node 9: 药盒执行指令 ==== -->
+  <rect x="55" y="480" width="210" height="40" class="box"/>
+  <text x="160" y="505" text-anchor="middle" class="node-text">COMMAND_EXEC</text>
+
+  <!-- Arrow: 指令下发 -> 药盒执行 -->
+  <line x1="335" y1="500" x2="265" y2="500" class="conn"/>
+  <text x="300" y="492" text-anchor="middle" class="label">Write Command</text>
+
+  <!-- Data flow column -->
+  <rect x="615" y="120" width="240" height="56" rx="8" fill="#F2F7FF" stroke="#4B3FE3" stroke-width="1.5"/>
+  <text x="735" y="140" text-anchor="middle" class="node-text" fill="#1A1759">广播包 (Adv Data)</text>
+  <text x="735" y="160" text-anchor="middle" class="node-desc">设备名 + Service UUID</text>
+
+  <rect x="615" y="210" width="240" height="56" rx="8" fill="#F7F7F8" stroke="rgba(23,23,23,0.12)" stroke-width="1.5"/>
+  <text x="735" y="230" text-anchor="middle" class="node-text">GATT Service 发现</text>
+  <text x="735" y="250" text-anchor="middle" class="node-desc">0x180A + 自定义 128-bit UUID</text>
+
+  <rect x="615" y="300" width="240" height="56" rx="8" fill="#F7F7F8" stroke="rgba(23,23,23,0.12)" stroke-width="1.5"/>
+  <text x="735" y="320" text-anchor="middle" class="node-text">6个 Characteristic</text>
+  <text x="735" y="340" text-anchor="middle" class="node-desc">Status Notify / Cmd Write / Log Notify</text>
+
+  <rect x="615" y="390" width="240" height="56" rx="8" fill="color-mix(in srgb,#1DC981 10%,transparent)" stroke="#1DC981" stroke-width="1.5"/>
+  <text x="735" y="410" text-anchor="middle" class="node-text" fill="#171717">双向数据通道</text>
+  <text x="735" y="430" text-anchor="middle" class="node-desc">Notify上报 + Write下发</text>
+
+  <rect x="615" y="480" width="240" height="40" rx="8" fill="#F7F7F8" stroke="rgba(23,23,23,0.12)" stroke-width="1.5"/>
+  <text x="735" y="505" text-anchor="middle" class="node-text">JSON 结构化数据</text>
+
+  <!-- Connecting lines from center column to data flow -->
+  <line x1="545" y1="148" x2="615" y2="148" class="conn-dashed"/>
+  <line x1="545" y1="238" x2="615" y2="238" class="conn-dashed"/>
+  <line x1="545" y1="328" x2="615" y2="328" class="conn-dashed"/>
+  <line x1="545" y1="418" x2="615" y2="418" class="conn-dashed"/>
+  <line x1="545" y1="500" x2="615" y2="500" class="conn-dashed"/>
+
+  <!-- Legend -->
+  <rect x="30" y="460" width="180" height="50" rx="8" fill="#fff" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+  <rect x="42" y="470" width="16" height="12" rx="3" fill="#F2F7FF" stroke="#4B3FE3" stroke-width="1.5"/>
+  <text x="64" y="480" class="label">初始/等待状态</text>
+  <rect x="42" y="490" width="16" height="12" rx="3" fill="color-mix(in srgb,#1DC981 10%,transparent)" stroke="#1DC981" stroke-width="1.5"/>
+  <text x="64" y="500" class="label">运行中状态</text>
+</svg>
